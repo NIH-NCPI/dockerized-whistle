@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # This script simply builds the docker image and copies the script
 # over to $HOME/bin. 
 
