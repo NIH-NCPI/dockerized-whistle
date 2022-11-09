@@ -24,10 +24,12 @@ echo ""
 
 echo "Add the following line to the file, .bash_profile, in your home"
 echo "directory to ensure that the script is in your PATH:"
+echo 
 echo "export PATH=$PATH:$HOME/bin"
 echo
 echo "Then source the .bash_profile or log in again for the new PATH to take"
 echo "effect. "
+echo
 echo "source $HOME/.bash_profile"
 
 echo
