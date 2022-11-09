@@ -18,3 +18,8 @@ It will copy a script named 'whistle' into $HOME/bin. If that directory isn't in
 
 (source the .bash_profile to effect the changes you made)
 > source ~/.bash_profile
+
+Once the whistle script is in your path, whistle should run just like any other command on your system: 
+> whistle --help
+
+It should be noted that this script requires that all files required by whistle to run can be found within the current working directory and that the arguments passed to whistle for those files will be relative to "." (the currently working directory), not full paths. 
