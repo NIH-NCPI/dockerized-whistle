@@ -10,11 +10,24 @@ RUN git clone https://github.com/GoogleCloudPlatform/healthcare-data-harmonizati
 
 WORKDIR /go/healthcare-data-harmonization
 
-# The target will be linked to /go/bin/whistle which is what we'll recommend
-# users to call when running whistle from this container
-RUN sh build_all.sh && \
-    ln -s /go/healthcare-data-harmonization/mapping_engine/main/main /go/bin/whistle && \
+# The target will be copied to /dist/whistle which will ultimately
+# get copied to the scratch image
+RUN mkdir -p /dist && \
+    sh build_all.sh && \
+    cp /go/healthcare-data-harmonization/mapping_engine/main/main /dist/whistle && \
     mkdir -p /work
+
+
+WORKDIR /dist
+
+# Copy the libraries needed to make whistle run
+RUN ldd /dist/whistle | tr -s '[:blank:]' '\n' | grep '^/' | \
+    xargs -I % sh -c 'mkdir -p $(dirname ./%); cp % ./%;' && \
+    mkdir -p lib64 && cp /lib64/ld-linux-x86-64.so.2 lib64/
+
+FROM scratch
+COPY --chown=0:0 --from=builder /dist /
+COPY --from=builder /work /work
 
 # /work is the working directory. Users should map the root directory of 
 # their project to this mount point and references to the initial whistle file
@@ -24,3 +37,4 @@ RUN sh build_all.sh && \
 # particular mount point, you will need to add them via the docker command in 
 # addition to the map to /work 
 WORKDIR /work
+ENTRYPOINT [ "/whistle" ]
