@@ -1,5 +1,4 @@
 FROM golang:1.13 AS builder
-ARG DOCKER_USER=default_user
 
 RUN apt-get -y update && \
     apt-get -y install \
@@ -29,9 +28,6 @@ WORKDIR /dist
 RUN ldd /dist/whistle | tr -s '[:blank:]' '\n' | grep '^/' | \
     xargs -I % sh -c 'mkdir -p $(dirname ./%); cp % ./%;' && \
     mkdir -p lib64 && cp /lib64/ld-linux-x86-64.so.2 lib64/
-
-#RUN addgroup -S $DOCKER_USER 
-#RUN adduser -S $DOCKER_USER -G $DOCKER_USER
 
 FROM scratch
 COPY --chown=0:0 --from=builder /dist /
