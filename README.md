@@ -3,6 +3,9 @@ Docker image for google's Whistle FHIR ingest language
 
 [Whistle](https://github.com/GoogleCloudPlatform/healthcare-data-harmonization) is google's Data Transformation Language which can be used to transform arbitrary JSON objects into FHIR compliant JSON objects. This repository contains a single docker image suitable to produce a fully functional whistle image and a shell script to make it behave like the actual application would without having to provide the various arguments required for docker to find and call the image. 
 
+## Regarding Whistle versions
+On Sept 26, 2023, whistle was updated to V2. This new version is currently incompatible with whistler due to some interface changes. It may take some time for me to dig into the changes and better understand what needs to be done to make the new version work with the pipeline. As a result, until Whistler is ready to support V2, this docker image will only build v1. 
+
 ## Requirements
 To use this repository, you should have docker installed as well as a full bash environment to run it in (I will look into Powershell options if there is interest) for those interested in using the install script. 
 
