@@ -2,5 +2,6 @@
 
 docker run --rm \
     --network=host \
+    -u $(id -u):$(id -g) \
     -v $PWD:/work \
     -t torstees/whistle "$@"

@@ -8,7 +8,7 @@ set -e
 # This must be run in the root directory of the dockerized-whistle
 # repository, since that is where the Dockerfile is kept.
 
-docker build -t torstees/whistle .
+docker build --build-arg DOCKER_USER=$USER -t torstees/whistle .
 echo "-----------------------------------------------------------------------"
 echo "A docker image, ncpi/whistle, has been created. "
 echo "-----------------------------------------------------------------------"
