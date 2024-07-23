@@ -10,7 +10,9 @@ set -e
 # if the user has Macbook with amd64, select compatible platform
 PLATFORM=""
 if PLATFORM=$(arch); then
-    PLATFORM="--platform linux/amd64" 
+    if PLATFORM="arm64"; then
+        PLATFORM="--platform linux/amd64" 
+    fi
 fi
 
 docker build --build-arg DOCKER_USER=$USER $PLATFORM -t torstees/whistle .
