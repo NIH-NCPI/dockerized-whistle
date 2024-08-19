@@ -9,8 +9,8 @@ set -e
 
 # if the user has Macbook with amd64, select compatible platform
 PLATFORM=""
-if PLATFORM=$(arch); then
-    if PLATFORM="arm64"; then
+ARCH=$(arch);
+    if ARCH == "arm64"; then
         PLATFORM="--platform linux/amd64" 
     fi
 fi
