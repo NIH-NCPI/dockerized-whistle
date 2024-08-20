@@ -4,15 +4,21 @@ set -e
 
 # This script simply builds the docker image and copies the script
 # over to $HOME/bin. 
-
 # This must be run in the root directory of the dockerized-whistle
 # repository, since that is where the Dockerfile is kept.
 
-docker build --build-arg DOCKER_USER=$USER -t torstees/whistle .
+# if the user has Macbook with amd64, select compatible platform
+PLATFORM=""
+ARCH=$(arch);
+    if ARCH == "arm64"; then
+        PLATFORM="--platform linux/amd64" 
+    fi
+fi
+
+docker build --build-arg DOCKER_USER=$USER $PLATFORM -t torstees/whistle .
 echo "-----------------------------------------------------------------------"
 echo "A docker image, ncpi/whistle, has been created. "
 echo "-----------------------------------------------------------------------"
-
 mkdir -p $HOME/bin
 cp scripts/whistle $HOME/bin
 
