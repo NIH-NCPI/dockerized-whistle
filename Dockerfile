@@ -1,5 +1,8 @@
-FROM golang:1.13 AS builder
+FROM golang:1.13-buster AS builder
 
+# Debian 10 (buster) is end-of-life, so its packages now live on
+# archive.debian.org. Point apt there, drop the buster-updates entry (it no
+# longer exists), and tell apt not to reject the expired Release files.
 RUN sed -i 's|security.debian.org|archive.debian.org|g; s|deb.debian.org|archive.debian.org|g; /buster-updates/d' /etc/apt/sources.list && \
     echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99archive && \
     apt-get -y update && \
@@ -34,9 +37,6 @@ RUN ldd /dist/whistle | tr -s '[:blank:]' '\n' | grep '^/' | \
 FROM scratch
 COPY --chown=0:0 --from=builder /dist /
 COPY --from=builder /work /work
-
-# This isn't working, and probably isn't necessary anymore...
-# USER $DOCKER_USER
 
 # /work is the working directory. Users should map the root directory of
 # their project to this mount point and references to the initial whistle file
