@@ -1,10 +1,12 @@
 FROM golang:1.13 AS builder
 
-RUN apt-get -y update && \
+RUN sed -i 's|security.debian.org|archive.debian.org|g; s|deb.debian.org|archive.debian.org|g; /buster-updates/d' /etc/apt/sources.list && \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99archive && \
+    apt-get -y update && \
     apt-get -y install \
     libclang1-11 \
     openjdk-11-jre \
-    protobuf-compiler 
+    protobuf-compiler
 
 RUN git clone https://github.com/GoogleCloudPlatform/healthcare-data-harmonization
 WORKDIR /go/healthcare-data-harmonization
@@ -33,14 +35,15 @@ FROM scratch
 COPY --chown=0:0 --from=builder /dist /
 COPY --from=builder /work /work
 
-USER $DOCKER_USER
+# This isn't working, and probably isn't necessary anymore...
+# USER $DOCKER_USER
 
-# /work is the working directory. Users should map the root directory of 
+# /work is the working directory. Users should map the root directory of
 # their project to this mount point and references to the initial whistle file
 # should be relative to that directory (as should any of the other arguments
-# passed to whistle). Do keep in mind that the docker image only knows about 
+# passed to whistle). Do keep in mind that the docker image only knows about
 # data that is mounted. So, if you need to point to directories outside this
-# particular mount point, you will need to add them via the docker command in 
-# addition to the map to /work 
+# particular mount point, you will need to add them via the docker command in
+# addition to the map to /work
 WORKDIR /work
 ENTRYPOINT [ "/whistle" ]
