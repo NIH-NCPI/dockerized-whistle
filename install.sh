@@ -3,19 +3,19 @@
 set -e
 
 # This script simply builds the docker image and copies the script
-# over to $HOME/bin. 
+# over to $HOME/bin.
 # This must be run in the root directory of the dockerized-whistle
 # repository, since that is where the Dockerfile is kept.
 
 # if the user has Macbook with amd64, select compatible platform
 PLATFORM=""
-ARCH=$(arch);
-    if ARCH == "arm64"; then
-        PLATFORM="--platform linux/amd64" 
-    fi
+ARCH=$(arch)
+if [ "$ARCH" = "arm64" ]; then
+    PLATFORM="--platform linux/amd64"
 fi
 
 docker build --build-arg DOCKER_USER=$USER $PLATFORM -t torstees/whistle .
+# docker build --build-arg DOCKER_USER=$USER -t torstees/whistle .
 echo "-----------------------------------------------------------------------"
 echo "A docker image, ncpi/whistle, has been created. "
 echo "-----------------------------------------------------------------------"
@@ -25,14 +25,14 @@ cp scripts/whistle $HOME/bin
 echo "-----------------------------------------------------------------------"
 echo "A script has been created at: $HOME/bin/whistle"
 echo "This script will handle the docker related arguments allowing you run "
-echo "whistle as if it were a native application" 
+echo "whistle as if it were a native application"
 echo "-----------------------------------------------------------------------"
 
 echo ""
 
 echo "Add the following line to the file, .bash_profile, in your home"
 echo "directory to ensure that the script is in your PATH:"
-echo 
+echo
 echo "export PATH=$PATH:$HOME/bin"
 echo
 echo "Then source the .bash_profile or log in again for the new PATH to take"

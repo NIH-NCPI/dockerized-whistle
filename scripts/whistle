@@ -1,12 +1,10 @@
 #!/bin/bash
 # if the user has Macbook with amd64, select compatible platform
 PLATFORM=""
-ARCH=$(arch);
-    if ARCH == "arm64"; then
-        PLATFORM="--platform linux/amd64" 
-    fi
+ARCH=$(arch)
+if [ "$ARCH" = "arm64" ]; then
+    PLATFORM="--platform linux/amd64"
 fi
-
 docker run --rm \
     $PLATFORM \
     --network=host \
